@@ -99,7 +99,7 @@ export default({config, db}) => {
             .then((review) => {
 
                 //the review property in FoodTruck schema is an array. We have to push the newly created review
-                truck.reviews.push(newReview);
+                truck.reviews.push(review);
 
                 //again saving the change explicitly
                 truck.save()
