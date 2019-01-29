@@ -99,7 +99,7 @@ export default({config, db}) => {
             .then((review) => {
 
                 //the review property in FoodTruck schema is an array. We have to push the newly created review
-                truck.reviews.push(review);
+                truck.reviews.push(newReview);
 
                 //again saving the change explicitly
                 truck.save()
@@ -110,6 +110,16 @@ export default({config, db}) => {
         })
         .catch(err => res.status(400).json(err));
 
+    });
+
+    // /v1/foodtruck/reviews/:id CRUD: Read(GET)
+    api.get('/reviews/:id', (req, res) => {
+
+        const {id} = req.params;
+
+        Review.find({foodtruck: id})
+        .then(reviews => res.json(reviews))
+        .catch(err => res.status(400).json(err))
     });
 
     return api;
