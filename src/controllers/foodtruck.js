@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import {Router} from 'express';
 import FoodTruck from '../models/foodtruck';
+import Review from '../models/review';
 import bodyParser from 'body-parser';
 
 export default({config, db}) => {
@@ -10,12 +11,13 @@ export default({config, db}) => {
     api.post('/add', (req, res) => {
 
          //destructored req.body properties
-        const {name, foodtype, avgcost} = req.body;
+        const {name, foodtype, avgcost, geometry} = req.body;
 
         let newTruck = new FoodTruck();
         newTruck.name = name;
         newTruck.foodtype = foodtype;
         newTruck.avgcost = avgcost;
+        newTruck.geometry.coordinates = geometry.coordinates;
 
         newTruck.save()
         .then(() => res.json(`FoodTruck saved successfully`))
@@ -30,6 +32,7 @@ export default({config, db}) => {
         FoodTruck.find({})
         .then(foodtrucks => res.json(foodtrucks))
         .catch(err => res.status(400).json(err));
+
     });
 
     // /v1/foodtruck/:id CRUD: Read(GET)
@@ -41,6 +44,7 @@ export default({config, db}) => {
         FoodTruck.findById(id)
         .then(foodtruck => res.json(foodtruck))
         .catch(err => res.status(400).json(err));
+
     });
 
     // /v1/foodtruck/:id CRUD: Update(Put)
@@ -61,6 +65,7 @@ export default({config, db}) => {
             .catch(err => res.status(400).json(err));
         })
         .catch(err => res.status(400).json(err));
+
     });
 
     // /v1/foodtruck/:id CRUD: Delete(DELETE)
@@ -73,6 +78,39 @@ export default({config, db}) => {
         .catch(err => res.json(err));
 
     })
+
+    // /v1/foodtruck/reviews/add/:id CRUD: Create(POST)
+    api.post('/reviews/add/:id', (req, res) => {
+        
+        const {id} = req.params;
+        const {title, text} = req.body;
+
+        FoodTruck.findById(id)
+        .then(truck => {
+            
+            let newReview = new Review();
+    
+            newReview.title = title;
+            newReview.text = text;
+            newReview.foodtruck = truck._id;
+            
+            //all changes to a record(instance of a schema) need to be explicitly saved
+            newReview.save()
+            .then((review) => {
+
+                //the review property in FoodTruck schema is an array. We have to push the newly created review
+                truck.reviews.push(newReview);
+
+                //again saving the change explicitly
+                truck.save()
+                .then(() => res.json('Review success'))
+                .catch(err => res.status(400).json(err));
+            })
+            .catch(err => res.status(400).json(err));
+        })
+        .catch(err => res.status(400).json(err));
+
+    });
 
     return api;
 }
