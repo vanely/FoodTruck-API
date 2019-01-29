@@ -10,12 +10,14 @@ export default({config, db}) => {
     api.post('/add', (req, res) => {
 
          //destructored req.body properties
-        const {name} = req.body;
+        const {name, foodtype, avgcost} = req.body;
 
-        let newRest = new FoodTruck();
-        newRest.name = name;
+        let newTruck = new FoodTruck();
+        newTruck.name = name;
+        newTruck.foodtype = foodtype;
+        newTruck.avgcost = avgcost;
 
-        newRest.save()
+        newTruck.save()
         .then(() => res.json(`FoodTruck saved successfully`))
         .catch(err => res.status(400).json(err));
 
