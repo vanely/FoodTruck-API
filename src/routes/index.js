@@ -4,7 +4,7 @@ import config from '../config';
 import initializeDB from '../DBconfig';
 import middleWare from '../middleWare';
 import foodtruck from '../controllers/foodtruck';
-// import app from '../index';
+import account from '../models/account';
 
 let router = express();
 
@@ -16,7 +16,10 @@ initializeDB(db => {
 
     //API ROUTES (v1)
     //'/foodtruck' route after '/v1' orefix with reataurant controller
-    router.use('/foodtruck', foodtruck({config, db}))
+    router.use('/foodtruck', foodtruck({config, db}));
+    
+    //user account and authentication route
+    router.use('/account', account({config, db}));
 });
 
 export default router;
