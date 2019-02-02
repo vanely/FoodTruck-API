@@ -3,6 +3,7 @@ import {Router} from 'express';
 import FoodTruck from '../models/foodtruck';
 import Review from '../models/review';
 import bodyParser from 'body-parser';
+import passport from 'passport'
 
 export default({config, db}) => {
     let api = Router();

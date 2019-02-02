@@ -9,7 +9,7 @@ import account from '../models/account';
 let router = express();
 
 //connect to DB
-initializeDB(db => {
+initializeDB((db) => {
 
     //internal middleware
     router.use(middleWare({config, db}));

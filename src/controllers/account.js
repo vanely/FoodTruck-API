@@ -7,7 +7,7 @@ import config from '../config';
 
 //import created middleware methods
 import { generateAccessToken, respond, authenticate } from '../middleware/authMiddleware';
-import { SIGPIPE } from 'constants';
+// import { SIGPIPE } from 'constants';
 
 export default ({config, db}) => {
     let api = Router();
@@ -28,7 +28,7 @@ export default ({config, db}) => {
         )(req, res => {
 
             res.status(200).json('New account successfully created');
-        })
+        });
     });
 
     // /v1/account/login CRUD: Create(POST)

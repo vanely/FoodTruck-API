@@ -22,7 +22,7 @@ let generateAccessToken = (req, res, next) => {
         {
             expiresIn: TOKENTIME
         }
-    )
+    );
     next();
 }
 

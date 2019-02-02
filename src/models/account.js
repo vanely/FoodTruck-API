@@ -3,13 +3,8 @@ import passportLocalMongoose from 'passport-local-mongoose';
 
 const Account = new Schema({
 
-    name: { type: String, required: true },
-    email: { 
-        type: String, required: true 
-    },
-    password: { 
-        type: String, required: true 
-    }
+    email: { type: String },
+    password: { type: String }
 });
 
 Account.plugin(passportLocalMongoose);
